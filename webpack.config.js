@@ -9,7 +9,7 @@ module.exports = {
     },
     resolve: {
       alias: {
-        'common-native-client': path.resolve(__dirname, './src/common-native-client'),
+        'common-native-client': path.resolve(__dirname, './common-native-client'),
       },
       extensions: [ '.ts', '.js' ]
     },
