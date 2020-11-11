@@ -4,7 +4,11 @@
   "description": "Native application for Chrome extensions",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config ./webpack.config.js --mode production",
+    "build-win": "npm run build-host && npm run copy-files-win",
+    "build-linux": "npm run build-host && npm run copy-files-linux",
+    "build-host": "webpack --config ./webpack.config.js --mode production",
+    "copy-files-win": "gulp buildWin",
+    "copy-files-linux": "gulp buildLinux",
     "test": "test"
   },
   "keywords": [
@@ -19,6 +23,7 @@
     "awesome-typescript-loader": "^5.2.1",
     "chrome-native-messaging": "^0.2.0",
     "chromecast-api": "^0.3.3",
+    "gulp": "^4.0.2",
     "tslint": "^6.1.2",
     "typescript": "^3.8.3",
     "typescript-tslint-plugin": "^0.5.5",

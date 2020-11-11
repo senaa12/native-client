@@ -78,6 +78,7 @@
       "dist"
     ],
     "include": [
-      "src", "common-native-client"
+      "./src", 
+      "./common-native-client"
     ]
 }

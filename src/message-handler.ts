@@ -3,9 +3,9 @@ import {
     Push,
     Done,
     NativeMessageTypeEnum,
-    ExecuteCommandNativeMessage
 } from 'common-native-client';
-const { spawn } = require('child_process');
+
+const executeSystemCommand = require('./executeSystemCommand');
 
 function messageHandler(msg: NativeMessage, push: Push, done: Done) {
     switch (msg.type) {
@@ -15,15 +15,11 @@ function messageHandler(msg: NativeMessage, push: Push, done: Done) {
             break;
         }
         case NativeMessageTypeEnum.ExecuteCommand: {
-            const message: ExecuteCommandNativeMessage = msg;
-            const args = message.command.split(' ');
-            const command = args.shift();
-            const sp = spawn(command, args);
-
+            executeSystemCommand(msg.data);
             break;
         }
         default: {
-            const exhaustingCheck: never = msg.type;
+            const exhaustingCheck: never = msg;
         }
     }
 }

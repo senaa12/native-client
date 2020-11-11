@@ -24,7 +24,7 @@ copy host.js %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host
 @echo @echo off > %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\run.bat
 if %IS_NODE_INSTALLED%==0 (
     @echo Coping installers node build
-    @echo "%~dp0node.exe" "%~dp0host.js" >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\run.bat
+    @echo "%~dp0node.exe" "%LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\host.js" >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\run.bat
 
     if "%PROCESSOR_ARCHITECTURE%"=="AMD64" (
         copy node-64.exe "%LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\node.exe"
@@ -33,7 +33,7 @@ if %IS_NODE_INSTALLED%==0 (
     )
 ) else (
     @echo Using systems node
-    @echo "node" "%~dp0host.js" >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\run.bat
+    @echo "node" "%LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\host.js" >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\run.bat
 )
 
 echo Setup complete, installed in %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host
