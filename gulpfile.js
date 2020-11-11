@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var del = require('del');
 
 var path = require("path");
 var hostBuildFolder = path.resolve(__dirname, './public');
@@ -6,6 +7,10 @@ var nodeFolder = path.resolve(__dirname, './node');
 var installationFolder = path.resolve(__dirname, './installation');
 
 var fullAppBuildFolder = path.resolve(__dirname, './app-build');
+
+gulp.task('clean-app-build', function(){
+    return del('./app-build/**', {force:true});
+});
 
 gulp.task('copy-app', function() {
     return gulp.src(
@@ -47,6 +52,6 @@ gulp.task('copy-install-linux', function() {
     );
 });
 
-exports.buildWin = gulp.series('copy-app', 'copy-node-win', 'copy-install-win');
-exports.buildLinux = gulp.series('copy-app', 'copy-node-linux', 'copy-install-linux');
+exports.buildWin = gulp.series('clean-app-build', 'copy-app', 'copy-node-win', 'copy-install-win');
+exports.buildLinux = gulp.series('clean-app-build', 'copy-app', 'copy-node-linux', 'copy-install-linux');
 
