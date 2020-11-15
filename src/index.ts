@@ -1,8 +1,11 @@
 const nativeMessage = require('chrome-native-messaging');
 const messageHandler = require('./message-handler');
+const messageLogger = require('./logger');
+
+const isProduction = process.env.PRODUCTION !== undefined ? JSON.parse(process.env.PRODUCTION) : false;
 
 const input = new nativeMessage.Input();
-const transform = new nativeMessage.Transform(messageHandler);
+const transform = new nativeMessage.Transform(messageLogger(messageHandler, isProduction));
 const output = new nativeMessage.Output();
 
 process.stdin

@@ -1,4 +1,7 @@
 const path = require("path");
+const webpack = require("webpack");
+
+const isProd = process.env.ENV !== "dev";
 
 module.exports = {
     target: 'node',
@@ -25,5 +28,12 @@ module.exports = {
           loader: "awesome-typescript-loader"
         }
       ]
-    }
+    },
+    plugins: [
+      new webpack.DefinePlugin({ 
+        'process.env': { 
+            PRODUCTION: JSON.stringify(isProd),
+        }
+      })
+    ]
 }

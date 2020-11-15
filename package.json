@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build-win": "npm run build-host && npm run copy-files-win",
-    "build-linux": "npm run build-host && npm run copy-files-linux",
-    "build-host": "webpack --config ./webpack.config.js --mode production",
+    "build-win-prod": "npm run build-host-prod && npm run copy-files-win",
+    "build-linux-prod": "npm run build-host-prod && npm run copy-files-linux",
+    "build-host": "cross-env ENV=dev webpack --config ./webpack.config.js --mode production",
+    "build-host-prod": "webpack --config ./webpack.config.js --mode production",
     "copy-files-win": "gulp buildWin",
     "copy-files-linux": "gulp buildLinux",
     "test": "test"
@@ -22,6 +24,7 @@
     "@types/node": "^13.13.30",
     "awesome-typescript-loader": "^5.2.1",
     "chrome-native-messaging": "^0.2.0",
+    "cross-env": "^7.0.2",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "tslint": "^6.1.3",
