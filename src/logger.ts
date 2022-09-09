@@ -1,47 +1,35 @@
+import { NativeMessage } from 'common-native-client';
+
 const fs = require('fs');
+const functionUtils = require('./utils/functionUtils');
 
 type FunctionType = (...args: any[]) => any;
 
-const wrapFunction = function(
-    functionToWrap: FunctionType,
-    executeBefore?: FunctionType,
-    executeAfter?: FunctionType,
-) {
-    return function() {
-        const args = Array.prototype.slice.call(arguments);
-        let result;
-        if (!!executeBefore) {
-            executeBefore.apply(this, args);
-        }
+const log = (messageTitle: string, messageBody?: string) => {
+    const fileName = 'log.txt';
 
-        result = functionToWrap.apply(this, args);
+    fs.appendFileSync(fileName, `${messageTitle}\n`);
+    
+    if (!!messageBody?.length) {
+        fs.appendFileSync(fileName, `${messageBody}\n\n`);
+    }
+}
 
-        if (!!executeAfter) {
-            executeAfter.apply(this, args);
-        }
-
-        return result;
-    };
-
-};
-
-const logger = (func: FunctionType, isProduction: boolean) => {
-    const log = (...args: any[]) => {
+const messageLogger = (func: FunctionType, isProduction: boolean) => {
+    const innerLog = (...args: any[]) => {
         if (args.length && args.findIndex((x) => x.type === 'chromex.dispatch') > -1) {
             return;
         }
 
-        const fileName = 'log.txt';
-
-        fs.appendFileSync(fileName, 'Message Received!\n');
-        fs.appendFileSync(fileName, `${JSON.stringify(args)}\n\n`);
+        log('Message Received!', JSON.stringify(args));
     };
 
     if (isProduction) {
-        return wrapFunction(func);
+        return functionUtils.wrapFunction(func);
     }
 
-    return wrapFunction(func, log);
+    return functionUtils.wrapFunction(func, innerLog);
 };
 
-module.exports = logger;
+module.exports = messageLogger;
+module.exports.log = log;

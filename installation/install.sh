@@ -7,6 +7,16 @@ fi
 
 echo "Installation started"
 
+if [ -z "$1" ]
+  then
+    echo "Installling native client for: Auto shutdown extension extension "
+    EXTENSION_ID = "heanibacideokneklnfomdlokppmcaam"
+  
+  else
+    echo "Installing native client for extension with id: $1"
+    EXTENSION_ID = $1
+fi
+
 MANIFEST_LOCATION="$HOME/.config/google-chrome/NativeMessagingHosts/"
 MANIFEST_LOCATION_CHROMIUM="$HOME/.config/chromium/NativeMessagingHosts"
 MANIFEST_NAME="shutdown.extension.host.json"
@@ -28,7 +38,7 @@ echo "   \"path\": \"$PROGRAM\"," >> "$MANIFEST"
 echo '   "type": "stdio",' >> "$MANIFEST"
 echo '   "allowed_origins": [' >> "$MANIFEST"
 ## you can change ID here with "chrome-extension://YOUR-ID-HERE/""
-echo '    	 "chrome-extension://heanibacideokneklnfomdlokppmcaam/"' >> "$MANIFEST"
+echo '    	 "chrome-extension://${EXTENSION_ID}"' >> "$MANIFEST"
 echo '   ]' >> "$MANIFEST"
 echo '}' >> "$MANIFEST"
 
@@ -40,12 +50,15 @@ echo "   \"path\": \"$PROGRAM\"," >> "$MANIFEST_CHROMIUM"
 echo '   "type": "stdio",' >> "$MANIFEST_CHROMIUM"
 echo '   "allowed_origins": [' >> "$MANIFEST_CHROMIUM"
 ## you can change ID here with "chrome-extension://YOUR-ID-HERE/""
-echo '    	 "chrome-extension://heanibacideokneklnfomdlokppmcaam/"' >> "$MANIFEST_CHROMIUM"
+echo '    	 "chrome-extension://${EXTENSION_ID}/"' >> "$MANIFEST_CHROMIUM"
 echo '   ]' >> "$MANIFEST_CHROMIUM"
 echo '}' >> "$MANIFEST_CHROMIUM"
 
 echo "Copying host..."
 cp ./host.js "$PROGRAM_LOCATION"
+
+echo "Copying settings..."
+cp ./settings.json "$PROGRAM_LOCATION"
 
 echo "#!/usr/bin/env bash" > "$PROGRAM"
 if which node > /dev/null

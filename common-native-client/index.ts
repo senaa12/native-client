@@ -5,11 +5,20 @@
 export enum NativeMessageTypeEnum {
     Echo = 'ECHO',
     ExecuteCommand = 'EXECUTE_COMMAND',
+    SendMail = 'SEND_MAIL'
+}
+
+export interface SendMailPayload {
+    /** if sending to multiple address, just separate them by commas */
+    to: string;
+    subject: string;
+    html: string;
 }
 
 export interface NativeMessagePayloadMapper {
     [NativeMessageTypeEnum.Echo]: any;
     [NativeMessageTypeEnum.ExecuteCommand]: string;
+    [NativeMessageTypeEnum.SendMail]: SendMailPayload;
 }
 
 export interface NativeMessageTypings<T extends keyof NativeMessagePayloadMapper> {
@@ -19,7 +28,8 @@ export interface NativeMessageTypings<T extends keyof NativeMessagePayloadMapper
 
 export declare type NativeMessage =
     NativeMessageTypings<NativeMessageTypeEnum.Echo> |
-    NativeMessageTypings<NativeMessageTypeEnum.ExecuteCommand>;
+    NativeMessageTypings<NativeMessageTypeEnum.ExecuteCommand> |
+    NativeMessageTypings<NativeMessageTypeEnum.SendMail>;
 
 export declare type Push = (mess: NativeMessage) => void;
 export declare type Done = () => void;
