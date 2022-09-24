@@ -7,18 +7,27 @@ fi
 
 echo "Installation started"
 
-if [ -z "$1" ]
+if [[ -z "$1" ]];
   then
     echo "Installling native client for: Auto shutdown extension extension "
-    EXTENSION_ID = "heanibacideokneklnfomdlokppmcaam"
+    EXTENSION_ID="heanibacideokneklnfomdlokppmcaam"
   
   else
     echo "Installing native client for extension with id: $1"
-    EXTENSION_ID = $1
+    EXTENSION_ID=$1
 fi
 
-MANIFEST_LOCATION="$HOME/.config/google-chrome/NativeMessagingHosts/"
-MANIFEST_LOCATION_CHROMIUM="$HOME/.config/chromium/NativeMessagingHosts"
+if [[ "$OSTYPE" == "linux-gnu"* ]]; 
+    then
+        # LINUX
+        MANIFEST_LOCATION="$HOME/.config/google-chrome/NativeMessagingHosts/"
+        MANIFEST_LOCATION_CHROMIUM="$HOME/.config/chromium/NativeMessagingHosts/"
+    else
+        # MAC OSX
+        MANIFEST_LOCATION="$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts/"
+        MANIFEST_LOCATION_CHROMIUM="$HOME/Library/Application Support/Chromium/NativeMessagingHosts/"
+fi
+
 MANIFEST_NAME="shutdown.extension.host.json"
 MANIFEST="$MANIFEST_LOCATION$MANIFEST_NAME"
 MANIFEST_CHROMIUM="$MANIFEST_LOCATION_CHROMIUM$MANIFEST_NAME"
@@ -38,7 +47,7 @@ echo "   \"path\": \"$PROGRAM\"," >> "$MANIFEST"
 echo '   "type": "stdio",' >> "$MANIFEST"
 echo '   "allowed_origins": [' >> "$MANIFEST"
 ## you can change ID here with "chrome-extension://YOUR-ID-HERE/""
-echo '    	 "chrome-extension://${EXTENSION_ID}"' >> "$MANIFEST"
+echo "    	 \"chrome-extension://$EXTENSION_ID/\"" >> "$MANIFEST"
 echo '   ]' >> "$MANIFEST"
 echo '}' >> "$MANIFEST"
 
@@ -50,7 +59,7 @@ echo "   \"path\": \"$PROGRAM\"," >> "$MANIFEST_CHROMIUM"
 echo '   "type": "stdio",' >> "$MANIFEST_CHROMIUM"
 echo '   "allowed_origins": [' >> "$MANIFEST_CHROMIUM"
 ## you can change ID here with "chrome-extension://YOUR-ID-HERE/""
-echo '    	 "chrome-extension://${EXTENSION_ID}/"' >> "$MANIFEST_CHROMIUM"
+echo "    	 \"chrome-extension://$EXTENSION_ID/\"" >> "$MANIFEST_CHROMIUM"
 echo '   ]' >> "$MANIFEST_CHROMIUM"
 echo '}' >> "$MANIFEST_CHROMIUM"
 
@@ -64,7 +73,7 @@ echo "#!/usr/bin/env bash" > "$PROGRAM"
 if which node > /dev/null
     then
         echo "Node is installed, skipping..."
-	    echo "node host.js" >> "$PROGRAM"
+	    echo "/usr/local/bin/node host.js" >> "$PROGRAM"
 
     else
         echo "Using installer node..."
